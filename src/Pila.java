@@ -1,7 +1,7 @@
 public class Pila {
-    private int[] pila;
+    private final int[] pila;
     private int top;
-    private int capacidad;
+    private final int capacidad;
 
     public Pila(int capacidad) {
         this.capacidad = capacidad;
