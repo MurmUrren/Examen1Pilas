@@ -3,9 +3,9 @@ import java.awt.*;
 
 
 public class PilaGUI extends JFrame {
-    private Pila pila;
-    private JTextField textFieldElemento;
-    private JTextArea textAreaPila;
+    private final Pila pila;
+    private final JTextField textFieldElemento;
+    private final JPanel panelPila;
 
     public PilaGUI(int capacidad) {
         pila = new Pila(capacidad);
@@ -36,13 +36,15 @@ public class PilaGUI extends JFrame {
 
         JPanel panelInferior = new JPanel();
         panelInferior.setLayout(new BorderLayout());
-        textAreaPila = new JTextArea();
-        JScrollPane scrollPane = new JScrollPane(textAreaPila);
+        panelPila = new JPanel();
+        panelPila.setLayout(new BoxLayout(panelPila, BoxLayout.Y_AXIS));
+        JScrollPane scrollPane = new JScrollPane(panelPila);
 
         panelInferior.add(scrollPane, BorderLayout.CENTER);
 
         panelPrincipal.add(panelSuperior, BorderLayout.NORTH);
         panelPrincipal.add(panelInferior, BorderLayout.CENTER);
+
 
         add(panelPrincipal);
 
@@ -91,12 +93,27 @@ public class PilaGUI extends JFrame {
     }
 
     private void actualizarPila() {
-        textAreaPila.setText("");
+        panelPila.removeAll();
+
         Pila pilaTemporal = new Pila(pila.size());
 
         while (!pila.isEmpty()) {
             int elemento = pila.pop();
-            textAreaPila.append(elemento + "\n");
+
+            JPanel cubo = new JPanel();
+            cubo.setBackground(Color.BLUE);
+            cubo.setPreferredSize(new Dimension(50, 50));
+            cubo.setMaximumSize(new Dimension(50, 50));
+            cubo.setAlignmentX(Component.CENTER_ALIGNMENT);
+            cubo.setAlignmentY(Component.CENTER_ALIGNMENT);
+
+            JLabel labelNumero = new JLabel(String.valueOf(elemento));
+            labelNumero.setForeground(Color.WHITE);
+            labelNumero.setFont(new Font("Arial", Font.BOLD, 20));
+
+            cubo.add(labelNumero);
+            panelPila.add(cubo);
+
             pilaTemporal.push(elemento);
         }
 
@@ -104,7 +121,12 @@ public class PilaGUI extends JFrame {
             int elemento = pilaTemporal.pop();
             pila.push(elemento);
         }
+
+        revalidate();
+        repaint();
     }
+
+
 
     public static void main(String[] args) {
         int capacidad = Integer.parseInt(JOptionPane.showInputDialog(null,
